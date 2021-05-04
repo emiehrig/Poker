@@ -1,12 +1,14 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Player
 {
     protected ArrayList<Card> hand;
     private String name;
     private int stash;
-    private JPanel cardArea; //TODO: Implement this.
+    private JPanel cardPanel; //TODO: Implement this.
 
     /**
      * Constructor for objects of class Player
@@ -16,6 +18,7 @@ public class Player
         hand = new ArrayList<Card>();
         name = "Player";
         setStash(500);
+        setCardPanel();
     }
 
     /**
@@ -26,6 +29,16 @@ public class Player
         hand = new ArrayList<Card>();
         this.name = name;
         setStash(stash);
+        setCardPanel();
+    }
+
+    /**
+     * Get the player's name.
+     * @return The player's name.
+     */
+    public String getName()
+    {
+        return name;
     }
 
     /**
@@ -37,19 +50,42 @@ public class Player
         return stash;
     }
 
-    public JPanel getCardArea()
+    public JPanel getCardPanel()
     {
-        return cardArea;
+        return cardPanel;
+    }
+
+    public void setName(String name)
+    {
+        if(name != null && name.trim().length() != 0)
+        {
+            this.name = name;
+        }
     }
 
     /**
      * Set the amount of money the player has available to bet, must be >= 0
+     * @param stash the player's stash amount.
      */
     public void setStash(int stash)
     {
         if (stash >= 0)
         {
             this.stash = stash;
+        }
+    }
+
+    public void setCardPanel()
+    {
+        cardPanel = new JPanel();
+        cardPanel.setLayout(new FlowLayout());
+    }
+
+    public void resetCardPanel()
+    {
+        for(int i = (hand.size() - 1);  i >= 0; i--)
+        {
+            cardPanel.remove(i);
         }
     }
 
@@ -63,13 +99,15 @@ public class Player
         if (visibility)
         {
             card.show();
-            hand.add(card);
         }
         else
         {
             card.hide();
-            hand.add(card);
         }
+
+        hand.add(card);
+        Collections.sort(hand);
+        cardPanel.add(card.getCardLabel());
     }
 
     /**
@@ -84,11 +122,16 @@ public class Player
     }
 
 
-    public void scoreHand()
+    /**
+     * Checks hand type and assigns value to it for scoring purposes.
+     * @return the value of the hand, based on hand type and additional weighted calculations.
+     */
+    public int scoreHand()
     {
-        //TODO: Add documentation regarding scoring of the hand as per 5-card stud rules.
-        //TODO: Refactor for 5-card stud.
-        //TODO: Add correct return type (void is temporary).
+        CheckHand checkHand = new CheckHand();
+        int handValue = checkHand.valueHand(hand);
+
+        return handValue;
     }
 
     /**

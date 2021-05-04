@@ -11,7 +11,7 @@ import java.io.IOException;
  * @version 2021.04.28.01
  */
 
-public class Card
+public class Card implements Comparable<Card>
 {
     private Suit suit;
     private int value;
@@ -20,12 +20,12 @@ public class Card
 
     private BufferedImage face;
     private BufferedImage back;
-    JLabel cardLabel;
+    JLabel cardLabel = new JLabel();
 
     public Card(Suit suit, int value, boolean visible, String name) throws IOException
     {
         this.suit = suit;
-        if (value >= 1 && value <= 11)
+        if (value >= 2 && value <= 14)
         {
             this.value = value;
         }
@@ -35,6 +35,7 @@ public class Card
         String fileName = "png/" + name.toLowerCase() + "_of_" + suit.name().toLowerCase() + ".png";
         face = ImageIO.read(new File(fileName));
         back = ImageIO.read(new File("png/back.png"));
+        setCardLabel();
     }
 
     /**
@@ -87,16 +88,16 @@ public class Card
      */
     public void setCardLabel()
     {
-        if(isVisible())
+        ImageIcon icon = new ImageIcon();
+        if(this.isVisible())
         {
-            ImageIcon icon = new ImageIcon(face);
-            cardLabel.setIcon(icon);
+            icon = new ImageIcon(face);
         }
         else
         {
-            ImageIcon icon = new ImageIcon(back);
-            cardLabel.setIcon(icon);
+            icon = new ImageIcon(back);
         }
+        cardLabel.setIcon(icon);
 
         cardLabel.setBackground(Color.WHITE);
         cardLabel.setOpaque(true);
@@ -108,6 +109,7 @@ public class Card
     public void show()
     {
         visible = true;
+        setCardLabel();
     }
 
     /**
@@ -116,6 +118,7 @@ public class Card
     public void hide()
     {
         visible = false;
+        setCardLabel();
     }
 
     /**
@@ -170,5 +173,22 @@ public class Card
     public String getMemoryAddress()
     {
         return super.toString();
+    }
+
+    @Override
+    public int compareTo(Card otherCard)
+    {
+        Integer integerValue = this.value;
+        int compareValue = integerValue.compareTo(otherCard.getValue());
+
+        // if values equal, sort by Suit, else sort by value
+        if(compareValue == 0)
+        {
+            return suit.compareTo(otherCard.suit);
+        }
+        else
+        {
+            return compareValue;
+        }
     }
 }

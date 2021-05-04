@@ -23,19 +23,19 @@ public class Deck
                     }
                     else if (i == 11)
                     {
-                        cards.add(new Card(suit, 10, true, "Jack"));
+                        cards.add(new Card(suit, 11, true, "Jack"));
                     }
                     else if (i == 12)
                     {
-                        cards.add(new Card(suit, 10, true, "Queen"));
+                        cards.add(new Card(suit, 12, true, "Queen"));
                     }
                     else if (i == 13)
                     {
-                        cards.add(new Card(suit, 10, true, "King"));
+                        cards.add(new Card(suit, 13, true, "King"));
                     }
                     else
                     {
-                        cards.add(new Card(suit, 11, true, "Ace"));
+                        cards.add(new Card(suit, 14, true, "Ace"));
                     }
                 }
                 catch(IOException e)
